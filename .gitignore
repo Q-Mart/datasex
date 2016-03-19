@@ -4,6 +4,8 @@ data.db
 ####DATA SET####
 road_data/
 
+venv/
+
 *.gem
 *.rbc
 /.config
