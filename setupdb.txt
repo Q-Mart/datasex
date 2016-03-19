@@ -2,3 +2,4 @@ sqlite3 data.db
 sqlite> .read schema.sql
 sqlite> .mode csv
 sqlite> .import DfTRoadSafety_Accidents_2014.csv dataset
+sqlite> DELETE FROM dataset WHERE first_Road_Class="1st_Road_Class" 
