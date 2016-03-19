@@ -1,4 +1,11 @@
 import csv
+import vincent
+
+uk_topo = r'uk.json'
+
+geo_data = [{'name': 'UK driving heatmap',
+             'url':uk_topo,
+             'feature': 'subunits'}]
 
 fieldnames = ('Accident_Index','Location_Easting_OSGR','Location_Northing_OSGR',
               'Longitude','Latitude','Police_Force',
@@ -13,5 +20,7 @@ fieldnames = ('Accident_Index','Location_Easting_OSGR','Location_Northing_OSGR',
 
 with open('DfTRoadSafety_Accidents_2014.csv','r') as csvfile:
     reader = csv.DictReader(csvfile, fieldnames)
-    for row in reader:
-        print row['Accident_Index']
+    # for row in reader:
+    #     print row['Accident_Index']
+
+vis = vincent.Map(geo_data=geo_data, scale=200)
