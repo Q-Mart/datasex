@@ -1,8 +1,17 @@
 import csv
 
 from bokeh.io import output_file, show
-from bokeh.models import ColumnDataSource
 from bokeh.plotting import figure
+from bokeh.models import (
+  GMapPlot, GMapOptions, ColumnDataSource, Circle, DataRange1d, PanTool, WheelZoomTool, BoxSelectTool
+)
+
+def mean(data):
+  sum = 0
+  for number in data:
+    sum += number
+
+  return sum/len(data)
 
 fieldnames = ('Accident_Index','Location_Easting_OSGR','Location_Northing_OSGR',
               'Longitude','Latitude','Police_Force',
@@ -27,11 +36,22 @@ with open('DfTRoadSafety_Accidents_2014.csv','r') as csvfile:
         lat.append(float(row['Latitude']))
         lon.append(float(row['Longitude']))
 
+map_options = GMapOptions(lat=mean(lat), lng=mean(lon), map_type="roadmap", zoom=6)
 
-    source = ColumnDataSource()
-    source.add(lon)
-    source.add(lat)
-    p = figure()
-    p.circle(x=lon, y=lat, alpha=0.9, source=source)
-    output_file("geojson.html")
-    show(p)
+plot = GMapPlot(
+    x_range=DataRange1d(), y_range=DataRange1d(), map_options=map_options, title="Car Accidents in the UK during 2014"
+)
+
+source = ColumnDataSource(
+    data=dict(
+        lat = lat,
+        lon = lon,
+    )
+)
+
+circle = Circle(x="lon", y="lat", size=1, fill_color="blue", fill_alpha=0.8, line_color=None)
+plot.add_glyph(source, circle)
+
+plot.add_tools(PanTool(), WheelZoomTool(), BoxSelectTool())
+output_file("gmap_plot.html")
+show(plot)
