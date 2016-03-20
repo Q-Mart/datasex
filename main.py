@@ -1,11 +1,8 @@
 import csv
-import vincent
 
-uk_topo = r'uk.json'
-
-geo_data = [{'name': 'UK driving heatmap',
-             'url':uk_topo,
-             'feature': 'subunits'}]
+from bokeh.io import output_file, show
+from bokeh.models import ColumnDataSource
+from bokeh.plotting import figure
 
 fieldnames = ('Accident_Index','Location_Easting_OSGR','Location_Northing_OSGR',
               'Longitude','Latitude','Police_Force',
@@ -20,7 +17,21 @@ fieldnames = ('Accident_Index','Location_Easting_OSGR','Location_Northing_OSGR',
 
 with open('DfTRoadSafety_Accidents_2014.csv','r') as csvfile:
     reader = csv.DictReader(csvfile, fieldnames)
-    # for row in reader:
-    #     print row['Accident_Index']
 
-vis = vincent.Map(geo_data=geo_data, scale=200)
+    lat=[]
+    lon=[]
+
+    reader.next()
+
+    for row in reader:
+        lat.append(float(row['Latitude']))
+        lon.append(float(row['Longitude']))
+
+
+    source = ColumnDataSource()
+    source.add(lon)
+    source.add(lat)
+    p = figure()
+    p.circle(x=lon, y=lat, alpha=0.9, source=source)
+    output_file("geojson.html")
+    show(p)
