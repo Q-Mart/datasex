@@ -3,7 +3,7 @@ import csv
 from bokeh.io import output_file, show
 from bokeh.plotting import figure
 from bokeh.models import (
-  GMapPlot, GMapOptions, ColumnDataSource, Circle, DataRange1d, PanTool, WheelZoomTool, BoxSelectTool
+  GMapPlot, GMapOptions, ColumnDataSource, Cross, DataRange1d, PanTool, WheelZoomTool, BoxSelectTool
 )
 
 def mean(data):
@@ -49,7 +49,7 @@ source = ColumnDataSource(
     )
 )
 
-circle = Circle(x="lon", y="lat", size=1, fill_color="blue", fill_alpha=0.8, line_color=None)
+circle = Cross(x="lon", y="lat", size=1, fill_alpha=0.8, line_color="blue")
 plot.add_glyph(source, circle)
 
 plot.add_tools(PanTool(), WheelZoomTool(), BoxSelectTool())
